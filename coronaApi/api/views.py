@@ -13,9 +13,10 @@ class PacienteViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'])
     def calculate(self,request,pk):
         pac = paciente.objects.get(cpf = pk)
-        pac.h1n1 = predict_covid(pac.radiografia)[0]
-        pac.gripe_comum = predict_covid(pac.radiografia)[1]
-        pac.covid = predict_covid(pac.radiografia)[2]
+        pred = predict_covid(pac.radiografia)
+        pac.h1n1 = pred[0]
+        pac.gripe_comum = pred[1]
+        pac.covid = pred[2]
         pac.save()
         return redirect("/pacientes/"+pk+"/")
         
