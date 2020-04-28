@@ -17,7 +17,7 @@ class paciente(models.Model):
 
 class exame(models.Model):
     id_exame = models.AutoField(primary_key=True)
-    Paciente = models.ForeignKey(paciente, on_delete=models.CASCADE)
+    paciente = models.ForeignKey(paciente, on_delete=models.CASCADE)
     h1n1 = models.FloatField(editable=False, null=True)
     gripe_comum = models.FloatField(editable=False, null=True)
     covid = models.FloatField(editable=False, null=True)

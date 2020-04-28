@@ -17,8 +17,8 @@ class ExameViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         exa = exame()
-        pac = paciente.objects.get(cpf = request.data['cpf'])
-        exa.Paciente = pac
+        pac = paciente.objects.get(cpf = request.data['paciente'])
+        exa.paciente = pac
         exa.radiografia = request.data['radiografia']
         pred = predict_covid(request.data['radiografia'])
         exa.h1n1 = pred[0]
