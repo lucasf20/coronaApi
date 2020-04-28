@@ -10,22 +10,22 @@ from django.utils.timezone import localtime
 class PacienteViewSet(viewsets.ModelViewSet):
     queryset = paciente.objects.all()
     serializer_class = PacienteSerializer
+        
+class ExameViewSet(viewsets.ModelViewSet):
+    queryset = exame.objects.all()
+    serializer_class = ExameSerializer
 
-    @action(detail=True, methods=['get'])
-    def calculate(self,request,pk):
-        pac = paciente.objects.get(cpf = pk)
+    def create(self, request, *args, **kwargs):
         exa = exame()
-        pred = predict_covid(pac.radiografia)
+        pac = paciente.objects.get(cpf = request.data['cpf'])
         exa.Paciente = pac
-        exa.radiografia = pac.radiografia
+        exa.radiografia = request.data['radiografia']
+        pred = predict_covid(request.data['radiografia'])
         exa.h1n1 = pred[0]
         exa.gripe_comum = pred[1]
         exa.covid = pred[2]
         exa.data = localtime()
         exa.save()
-        return redirect("/exames/"+str(exa.id_exame)+"/")
-        
-class ExameViewSet(viewsets.ModelViewSet):
-    queryset = exame.objects.all()
-    serializer_class = ExameSerializer
+        return redirect("/exames/"+str(exa.id_exame))
+
 # Create your views here.
